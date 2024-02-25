@@ -7,6 +7,27 @@ class App {
     // Game logic for a number guessing game
     fun playNumberGame(digitsToGuess: Int = 4) {
         //TODO: build a menu which calls the functions and works with the return values
+        val generatedNumber = generateRandomNonRepeatingNumber(digitsToGuess)
+        println("A random $digitsToGuess-digit number has been generated. Try to guess it!")
+
+        while (true) {
+            println("Enter your guess (must be $digitsToGuess digits long):")
+            val userInput = readLine()
+
+            if (userInput != null && userInput.length == digitsToGuess && userInput.toIntOrNull() != null) {
+                val guess = userInput.toInt()
+                val result = checkUserInputAgainstGeneratedNumber(guess, generatedNumber)
+                println("Output: ${result.n}:${result.m}")
+
+                if (guess == generatedNumber) {
+                    println("Congratulations, you've guessed the correct number: $generatedNumber")
+                    break // Exit the loop if the guess is correct
+                }
+            } else {
+                println("Invalid input. Make sure your guess is exactly $digitsToGuess digits long.")
+                // No need for a continue statement here as it's the end of the loop body
+            }
+        }
     }
 
     /**
@@ -25,7 +46,9 @@ class App {
      */
     val generateRandomNonRepeatingNumber: (Int) -> Int = { length ->
         //TODO implement the function
-        0   // return value is a placeholder
+        if (length !in 1..9) throw IllegalArgumentException("Length must be between 1 and 9.")
+        val digits = (1..9).shuffled().take(length).joinToString("").toInt()
+        digits
     }
 
     /**
@@ -46,11 +69,45 @@ class App {
      */
     val checkUserInputAgainstGeneratedNumber: (Int, Int) -> CompareResult = { input, generatedNumber ->
         //TODO implement the function
-        CompareResult(0, 0)   // return value is a placeholder
+        val inputStr = input.toString()
+        val generatedStr = generatedNumber.toString()
+
+        if (inputStr.length != generatedStr.length) throw IllegalArgumentException("Input and generated number must have the same number of digits.")
+
+        val matchedPositions = BooleanArray(generatedStr.length) { false }
+        val matchedDigitsInput = BooleanArray(10) { false } // Tracks matched digits in input to avoid double counting
+        val matchedDigitsGenerated = BooleanArray(10) { false } // Tracks matched digits in generated to avoid double counting
+
+        var correctPositions = 0
+        for (i in inputStr.indices) {
+            val digit = inputStr[i].toString().toInt()
+            if (inputStr[i] == generatedStr[i]) {
+                correctPositions++
+                matchedPositions[i] = true
+                matchedDigitsInput[digit] = true
+                matchedDigitsGenerated[digit] = true
+            }
+        }
+
+        var correctDigits = correctPositions // Start with digits in correct positions
+        for (i in inputStr.indices) {
+            if (!matchedPositions[i]) {
+                val digit = inputStr[i].toString().toInt()
+                if (generatedStr.contains(inputStr[i]) && !matchedDigitsGenerated[digit]) {
+                    correctDigits++
+                    matchedDigitsInput[digit] = true
+                    matchedDigitsGenerated[digit] = true
+                }
+            }
+        }
+
+        CompareResult(correctDigits, correctPositions)   // return value is a placeholder
     }
 }
 
 fun main() {
-    println("Hello World!")
+    val app = App()
+    println("Welcome to the Number Guessing Game!")
+    app.playNumberGame() // You can pass a different number as an argument to change the game's difficulty.
     // TODO: call the App.playNumberGame function with and without default arguments
 }
