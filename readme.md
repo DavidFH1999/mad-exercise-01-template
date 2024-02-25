@@ -10,11 +10,34 @@
 ### Describe how Kotlin handles null safety. What are nullable types and non-null types in Kotlin? (0,5 points)
 
 <span style="color:blue">Provide your answer here! </span>
-> Note: you can also use code snippets to illustrate your answer. 
+> Note: you can also use code snippets to illustrate your answer.
+These code snippets shows Kotlin's null safety mechanisms, including the use of non-null and nullable types, and how to safely access and manipulate nullable types using the safe call operator, Elvis operator, non-null assertion operator, and safe casts.
 
-```kotlin 
-// example code snippet
-val a: String = "value" // non-null type
+```kotlin
+// 1. Non-null Types
+var nonNullableString: String = "I'm non-nullable!" // Non-null type, cannot hold null
+// nonNullableString = null // Uncommenting this line would cause a compile-time error
+
+// 2. Nullable Types
+var nullableString: String? = null // Nullable type, can hold null
+// Working safely with nullable types:
+
+// Safe Call Operator (?.)
+// Use the safe call operator to safely access properties or methods on nullable types.
+val lengthSafeCall = nullableString?.length // Will be null if nullableString is null
+
+// Elvis Operator (?:)
+// Use the Elvis operator to provide a default value if the expression on the left is null.
+val lengthElvis = nullableString?.length ?: 0 // Will be 0 if nullableString is null
+
+// Non-null Assertion Operator (!!)
+// Forces a nullable type to be treated as non-null, throws NullPointerException if it's null.
+val lengthNonNullAssert = nullableString!!.length // Will throw NullPointerException if nullableString is null
+
+// Safe Casts (as?)
+// Attempts to cast a value to the specified type, returns null instead of throwing an exception if the cast isn't possible.
+val nullableInt: Int? = nullableString as? Int // Will be null because the cast is not possible
+
 ```
 
 ### What are lambda expressions and higher order functions in Kotlin? Why would you store a function inside a variable? (0,5 points)
