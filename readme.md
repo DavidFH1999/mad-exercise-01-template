@@ -10,8 +10,7 @@
 ### Describe how Kotlin handles null safety. What are nullable types and non-null types in Kotlin? (0,5 points)
 
 <span style="color:blue">Provide your answer here! </span>
-> Note: you can also use code snippets to illustrate your answer.
-These code snippets shows Kotlin's null safety mechanisms, including the use of non-null and nullable types, and how to safely access and manipulate nullable types using the safe call operator, Elvis operator, non-null assertion operator, and safe casts.
+>These code snippets shows Kotlin's null safety mechanisms, including the use of non-null and nullable types, and how to safely access and manipulate nullable types using the safe call operator, Elvis operator, non-null assertion operator, and safe casts.
 
 ```kotlin
 // 1. Non-null Types
@@ -43,6 +42,41 @@ val nullableInt: Int? = nullableString as? Int // Will be null because the cast 
 ### What are lambda expressions and higher order functions in Kotlin? Why would you store a function inside a variable? (0,5 points)
 
 <span style="color:blue">Provide your answer here!</span>
+> Lambda expressions are essentially unnamed functions that are defined and passed around as values.
+```kotlin
+// Define a lambda expression that takes two Ints and returns their sum.
+val sumLambda: (Int, Int) -> Int = { a, b -> a + b }
+
+// Use the lambda expression.
+val result = sumLambda(5, 3) // result is 8
+// This calls the lambda, passing in 5 and 3 as arguments.
+```
+> Higher-order functions can take functions as parameters or return them.
+```kotlin
+// Define a higher-order function that takes an operation as a parameter and applies it.
+fun performOperation(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
+    return operation(x, y)
+}
+
+// Call the higher-order function with a lambda expression.
+val multiplicationResult = performOperation(4, 2, { a, b -> a * b })
+// operation is a lambda that multiplies the two numbers.
+```
+
+> Functions in Kotlin can be stored in variables, allowing you to pass around behavior and change it dynamically.
+```kotlin
+// Store a lambda expression in a variable.
+var myComparator: (Int, Int) -> Boolean = { a, b -> a > b }
+
+// Use the function stored in the variable.
+println(myComparator(5, 4)) // Prints: true
+
+// Change the lambda expression stored in the variable.
+myComparator = { a, b -> a < b }
+
+// Use the new function stored in the variable.
+println(myComparator(5, 4)) // Prints: false
+```
 
 ### Provide a solution for the following number guessing game inside `App.kt`. (3 points)
 
